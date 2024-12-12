@@ -135,7 +135,7 @@ tail -f /dev/null' > /entrypoint.sh && \
 ENTRYPOINT ["/entrypoint.sh"]
 EOF
 
-    # Create docker-compose.yml with fixed naming
+    # Create docker-compose.yml without resource limits
     cat > "$project_dir/docker-compose.yml" << EOF
 name: nexus
 
@@ -147,11 +147,6 @@ services:
       - PROVER_ID=$prover_id
     volumes:
       - nexus-data:/root/.nexus
-    deploy:
-      resources:
-        limits:
-          cpus: '2'
-          memory: 6G
     restart: unless-stopped
     logging:
       options:
