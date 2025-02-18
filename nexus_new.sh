@@ -8,7 +8,7 @@ NC='\033[0m'
 # Installing required packages
 echo -e "${GREEN}Installing required packages...${NC}"
 apt-get update
-apt-get install -y pkg-config libssl-dev build-essential curl git
+apt-get install -y pkg-config libssl-dev build-essential curl git expect
 
 # Creating nexus directory if it doesn't exist
 mkdir -p /root/.nexus
@@ -32,5 +32,12 @@ source "$HOME/.cargo/env"
 
 echo -e "\n${GREEN}Starting Nexus Prover...${NC}"
 
-# Start the Nexus client
-curl https://cli.nexus.xyz/ | sh
+# Try with expect
+expect -c '
+spawn bash -c "curl https://cli.nexus.xyz/ | sh"
+expect "Terms of Use"
+send "Y\r"
+expect "continue?"
+send "Y\r"
+expect eof
+'
